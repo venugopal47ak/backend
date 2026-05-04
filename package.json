@@ -1,0 +1,15 @@
+{
+  "name": "namma-bd-render",
+  "private": true,
+  "version": "1.0.0",
+  "workspaces": [
+    "namma_backend/server"
+  ],
+  "scripts": {
+    "start": "npm run start --workspace nammaserve-server",
+    "server": "npm run server --workspace nammaserve-server",
+    "dev": "npm run dev --workspace nammaserve-server",
+    "seed": "npm run seed --workspace nammaserve-server",
+    "init:providers": "npm run init:providers --workspace nammaserve-server"
+  }
+}
