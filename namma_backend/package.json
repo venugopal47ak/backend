@@ -3,13 +3,15 @@
   "private": true,
   "version": "1.0.0",
   "workspaces": [
+    "client",
     "server"
   ],
   "scripts": {
-    "start": "npm run start --workspace server",
-    "dev": "npm run dev --workspace server",
+    "dev": "concurrently \"npm run dev --workspace server\" \"npm run dev --workspace client\"",
     "server": "npm run server --workspace server",
+    "dev:client": "npm run dev --workspace client",
     "dev:server": "npm run dev --workspace server",
+    "build": "npm run build --workspace client",
     "seed": "npm run seed --workspace server",
     "init:providers": "npm run init:providers --workspace server"
   },
