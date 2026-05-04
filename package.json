@@ -3,18 +3,15 @@
   "private": true,
   "version": "1.0.0",
   "workspaces": [
-    "client",
-    "server"
+    "namma_backend/server"
   ],
   "scripts": {
-    "dev": "concurrently \"npm run dev --workspace server\" \"npm run dev --workspace client\"",
-"server": "npm run server --workspace server",
     "start": "node server.js",
-    "dev:client": "npm run dev --workspace client",
-    "dev:server": "npm run dev --workspace server",
-    "build": "npm run build --workspace client",
-    "seed": "npm run seed --workspace server",
-    "init:providers": "npm run init:providers --workspace server"
+    "dev": "npm run dev --workspace namma_backend/server",
+    "dev:server": "npm run dev --workspace namma_backend/server",
+    "build": "npm run build --workspace namma_backend/server",
+    "seed": "npm run seed --workspace namma_backend/server",
+    "init:providers": "npm run init:providers --workspace namma_backend/server"
   },
   "devDependencies": {
     "concurrently": "^9.0.1"
