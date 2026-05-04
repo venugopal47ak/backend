@@ -1,10 +1,25 @@
-import Sentiment from "sentiment";
 import Booking from "../models/Booking.js";
 import Provider from "../models/Provider.js";
 import Review from "../models/Review.js";
 import asyncHandler from "../utils/asyncHandler.js";
 
-const sentimentAnalyzer = new Sentiment();
+// Simple sentiment analysis based on rating fallback
+const analyzeSentiment = (comment, rating) => {
+  if (!comment) {
+    // Fallback: Use rating if no comment
+    if (rating >= 4) return "positive";
+    if (rating <= 2) return "negative";
+    return "neutral";
+  }
+
+  // Basic keyword-based sentiment for comments
+  const positive = /good|great|excellent|amazing|perfect|love|awesome|fantastic|wonderful/i;
+  const negative = /bad|poor|terrible|horrible|awful|hate|waste|disappointing|useless/i;
+
+  if (negative.test(comment)) return "negative";
+  if (positive.test(comment)) return "positive";
+  return "neutral";
+};
 
 export const addReview = asyncHandler(async (req, res) => {
   const { booking: bookingId, rating, title, comment } = req.body;
@@ -129,10 +144,7 @@ export const updateReview = asyncHandler(async (req, res) => {
 
   if (comment !== undefined && comment !== review.comment) {
     review.comment = comment;
-    const result = sentimentAnalyzer.analyze(comment || "");
-    if (result.score > 0) review.sentiment = "positive";
-    else if (result.score < 0) review.sentiment = "negative";
-    else review.sentiment = "neutral";
+    review.sentiment = analyzeSentiment(comment, review.rating);
 
     // Fallback if empty comment
     if (!comment) {
