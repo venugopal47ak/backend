@@ -69,7 +69,17 @@ const connectDB = async () => {
   }
 
   try {
-    const connection = await mongoose.connect(process.env.MONGODB_URI);
+    const mongoUri = process.env.MONGODB_URI;
+
+    if (!mongoUri) {
+      throw new Error("MONGODB_URI is not set");
+    }
+
+    if (process.env.NODE_ENV === "production" && /localhost|127\.0\.0\.1/.test(mongoUri)) {
+      throw new Error("MONGODB_URI must point to MongoDB Atlas in production, not localhost");
+    }
+
+    const connection = await mongoose.connect(mongoUri);
     console.log(`MongoDB connected: ${connection.connection.host}`);
     await seedDefaultServices();
     return connection;
