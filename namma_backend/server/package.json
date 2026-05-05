@@ -5,6 +5,7 @@
   "private": true,
   "scripts": {
     "start": "node server.js",
+    "build": "echo 'No build step required'",
     "dev": "node --watch server.js",
     "seed": "node seed/seed.js",
     "init:providers": "node seed/initProviders.js"
