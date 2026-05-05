@@ -1,1 +1,1 @@
-import('./server/server.js');
+import("./namma_backend/server/server.js");
