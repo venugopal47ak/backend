@@ -69,28 +69,31 @@ const connectDB = async () => {
   }
 
   try {
-    const mongoUri = process.env.MONGODB_URI;
-
-    if (!mongoUri) {
+    if (!process.env.MONGODB_URI) {
       throw new Error("MONGODB_URI is not set");
     }
 
-    if (/YOUR_USERNAME|YOUR_PASSWORD|username:password|cluster\.mongodb\.net/i.test(mongoUri)) {
-      throw new Error(
-        "MONGODB_URI still contains placeholder MongoDB Atlas values. Replace it with your real Atlas connection string."
-      );
+    if (
+      /YOUR_USERNAME|YOUR_PASSWORD|username:password|<username>|<password>|replace_with/i.test(
+        process.env.MONGODB_URI
+      )
+    ) {
+      throw new Error("MONGODB_URI still contains placeholder values");
     }
 
-    if (process.env.NODE_ENV === "production" && /localhost|127\.0\.0\.1/.test(mongoUri)) {
-      throw new Error("MONGODB_URI must point to MongoDB Atlas in production, not localhost");
+    if (
+      process.env.NODE_ENV === "production" &&
+      /localhost|127\.0\.0\.1/.test(process.env.MONGODB_URI)
+    ) {
+      throw new Error("MONGODB_URI must not use localhost in production");
     }
 
-    const connection = await mongoose.connect(mongoUri);
+    const connection = await mongoose.connect(process.env.MONGODB_URI);
     console.log(`MongoDB connected: ${connection.connection.host}`);
     await seedDefaultServices();
     return connection;
   } catch (error) {
-    console.error("MongoDB connection failed", error.message);
+    console.error("MongoDB connection failed:", error.message);
     process.exit(1);
   }
 };
