@@ -75,6 +75,12 @@ const connectDB = async () => {
       throw new Error("MONGODB_URI is not set");
     }
 
+    if (/YOUR_USERNAME|YOUR_PASSWORD|username:password|cluster\.mongodb\.net/i.test(mongoUri)) {
+      throw new Error(
+        "MONGODB_URI still contains placeholder MongoDB Atlas values. Replace it with your real Atlas connection string."
+      );
+    }
+
     if (process.env.NODE_ENV === "production" && /localhost|127\.0\.0\.1/.test(mongoUri)) {
       throw new Error("MONGODB_URI must point to MongoDB Atlas in production, not localhost");
     }
